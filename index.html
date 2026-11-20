@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>垃圾山搬家公司</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="wrap">
+    <header class="hud" aria-live="polite">
+      <span class="hud-item">剩餘時間 <strong id="hud-time">60.0</strong></span>
+      <span class="hud-item">分數 <strong id="hud-score">0</strong></span>
+      <span class="hud-item">拖曳 <strong id="hud-chain">0 / 5</strong></span>
+      <span class="hud-item">載重 <strong id="hud-weight">0</strong></span>
+    </header>
+
+    <div class="stage">
+      <canvas id="game" width="960" height="640" aria-label="遊戲畫面"></canvas>
+
+      <section id="screen-title" class="overlay">
+        <div class="panel">
+          <h1>垃圾山搬家公司</h1>
+          <p class="tag">60 秒內，把垃圾山裡的家具拖進回收站！</p>
+          <ul class="rules">
+            <li><kbd>WASD</kbd> / <kbd>方向鍵</kbd> 駕駛拖車</li>
+            <li><kbd>空白鍵</kbd> 勾住附近最近的家具（最多 5 件）</li>
+            <li>貨越重，跑越慢、轉越鈍</li>
+            <li>拖著的家具撞牆會連同後面的貨一起脫落</li>
+            <li>整串家具都拖進綠色回收站才算交付得分</li>
+          </ul>
+          <table class="legend">
+            <tr><th>物件</th><th>重量</th><th>分數</th></tr>
+            <tr><td>📦 紙箱</td><td>1</td><td>10</td></tr>
+            <tr><td>🛋️ 沙發</td><td>3</td><td>30</td></tr>
+            <tr><td>🧊 冰箱</td><td>5</td><td>60</td></tr>
+          </table>
+          <p class="best-line">歷史最高分：<strong id="title-best">0</strong></p>
+          <button id="btn-start" type="button">開始搬家</button>
+        </div>
+      </section>
+
+      <section id="screen-over" class="overlay hidden">
+        <div class="panel">
+          <h2>收工！</h2>
+          <dl class="result">
+            <dt>分數</dt><dd id="over-score">0</dd>
+            <dt>交付件數</dt><dd id="over-count">0</dd>
+            <dt>歷史最高分</dt><dd id="over-best">0</dd>
+          </dl>
+          <p id="over-record" class="record hidden">新紀錄！</p>
+          <button id="btn-restart" type="button">再玩一次</button>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
