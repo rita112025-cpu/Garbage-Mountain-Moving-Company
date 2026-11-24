@@ -22,19 +22,6 @@
         <div class="panel">
           <h1>垃圾山搬家公司</h1>
           <p class="tag">60 秒內，把垃圾山裡的家具拖進回收站！</p>
-          <ul class="rules">
-            <li><kbd>WASD</kbd> / <kbd>方向鍵</kbd> 駕駛拖車</li>
-            <li><kbd>空白鍵</kbd> 勾住附近最近的家具（最多 5 件）</li>
-            <li>貨越重，跑越慢、轉越鈍</li>
-            <li>拖著的家具撞牆會連同後面的貨一起脫落</li>
-            <li>整串家具都拖進綠色回收站才算交付得分</li>
-          </ul>
-          <table class="legend">
-            <tr><th>物件</th><th>重量</th><th>分數</th></tr>
-            <tr><td>📦 紙箱</td><td>1</td><td>10</td></tr>
-            <tr><td>🛋️ 沙發</td><td>3</td><td>30</td></tr>
-            <tr><td>🧊 冰箱</td><td>5</td><td>60</td></tr>
-          </table>
           <p class="best-line">歷史最高分：<strong id="title-best">0</strong></p>
           <button id="btn-start" type="button">開始搬家</button>
         </div>
@@ -53,6 +40,26 @@
         </div>
       </section>
     </div>
+
+    <section class="help" aria-labelledby="help-title">
+      <h2 id="help-title">操作說明</h2>
+      <div class="help-cols">
+        <ul class="rules">
+          <li><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / <kbd>方向鍵</kbd> 駕駛拖車（<kbd>S</kbd>／<kbd>↓</kbd> 倒車）</li>
+          <li><kbd>空白鍵</kbd> 勾住附近最近的家具，出現橘色圈圈時才勾得到，最多 5 件</li>
+          <li>貨越重，跑越慢、轉越鈍</li>
+          <li>撞牆停住時，按方向鍵可以低速原地轉向</li>
+          <li>拖著的家具撞牆，該件和它後面的貨會脫落，1 秒後可重新勾</li>
+          <li>整串家具都拖進綠色回收站才算交付得分</li>
+        </ul>
+        <table class="legend">
+          <tr><th>物件</th><th>重量</th><th>分數</th></tr>
+          <tr><td>📦 紙箱</td><td>1</td><td>10</td></tr>
+          <tr><td>🛋️ 沙發</td><td>3</td><td>30</td></tr>
+          <tr><td>🧊 冰箱</td><td>5</td><td>60</td></tr>
+        </table>
+      </div>
+    </section>
   </main>
   <script src="game.js"></script>
 </body>
