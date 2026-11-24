@@ -21,8 +21,8 @@
   const BASE_SPEED = 230;
   const BASE_ACCEL = 420;
   const BASE_TURN = 3.4;
-  const PIVOT_GRIP = 0.4; // share of the empty trailer's full turn rate available while pinned against a wall
-  const PIVOT_WEIGHT_K = 0.01; // how much each unit of cargo weight slows that pivot
+  const PIVOT_GRIP = 0.5; // share of the empty trailer's full turn rate available while pinned against a wall
+  const PIVOT_WEIGHT_K = 0.005; // how much each unit of cargo weight slows that pivot (driving turns use 0.05)
   const BEST_KEY = 'gmmc.bestScore';
   const DT = 1 / 60;
 

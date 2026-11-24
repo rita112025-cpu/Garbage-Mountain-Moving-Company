@@ -190,11 +190,21 @@ check('穿過窄巷並轉出巷口不誤脫落', () => {
     const t = load();
     t.fresh(14, 6.5, Math.PI / 2);
     t.attach(kinds);
-    t.run(1.0, ['up']);
-    t.run(0.9, ['up', 'right']);
-    t.run(0.5, ['up']);
+    // South through the (13-14, 9) alley, then turn west in the open rows 16-18. The route must stay clear of
+    // walls the whole way, otherwise the check would be measuring a wall bump instead of the alley.
+    let bumped = false;
+    for (const [sec, dirs] of [[1.6, ['up']], [0.4, ['up', 'right']], [0.3, ['up']]]) {
+      t.api.keys.clear();
+      dirs.forEach((d) => t.api.keys.add(d));
+      for (let i = 0; i < Math.round(sec * 60); i++) {
+        t.api.step(1 / 60);
+        if (t.g.trailer.bumped > 0) bumped = true;
+      }
+    }
+    t.api.keys.clear();
     const row = Math.floor(t.g.trailer.y / t.TILE);
-    assert(row >= 10, `trailer never left the alley (row ${row})`);
+    assert(row >= 15, `trailer never got past the alley (row ${row})`);
+    assert(!bumped, `${kinds} route touched a wall`);
     assert(t.g.chain.length === kinds.length, `${kinds} dropped to ${t.g.chain.length}`);
   }
 });
@@ -322,8 +332,8 @@ check('斜頂牆且一直按住前進時，可靠轉向脫困（空車與滿載�
 });
 
 // Same corner, start angle and load as the manual browser runs: start position, Up+Right for 14 frames,
-// hold Up until pinned, then add Left. Empty ≈0.32 s; full load (5 fridges, weight 25) ≈2 s.
-check('原地轉速：空車維持約 0.32 秒、滿載約 2 秒脫困；放開前進也能轉', () => {
+// hold Up until pinned, then add Left. Empty ≈0.32 s; full load (5 fridges, weight 25) ≈1.7 s.
+check('原地轉速：空車維持約 0.32 秒、滿載約 1.7 秒脫困；放開前進也能轉', () => {
   const scenario = (loaded, releaseUp) => {
     const t = load();
     t.api.startRound();
@@ -355,14 +365,17 @@ check('原地轉速：空車維持約 0.32 秒、滿載約 2 秒脫困；放開�
   const empty = scenario(false, false).frames;
   const full = scenario(true, false).frames;
   assert(empty >= 16 && empty <= 22, `empty took ${empty} frames (expected ~19 ≈ 0.32 s)`);
-  assert(full >= 105 && full <= 140, `full load took ${full} frames (expected ~125 ≈ 2 s)`);
+  assert(full >= 90 && full <= 112, `full load took ${full} frames (expected ~100 ≈ 1.7 s)`);
 
   // Up released while pinned: arrows alone still pivot in place, at the weight-scaled pivot rate.
   const e = scenario(false, true);
   const l = scenario(true, true);
   assert(e.moved < 1 && l.moved < 1, `moved while pivoting without throttle (${e.moved}, ${l.moved})`);
-  assert(Math.abs(e.turned - 1.36 * 0.5) < 0.05, `empty pivot turned ${e.turned.toFixed(3)} rad in 0.5 s`);
-  assert(Math.abs(l.turned - (1.36 / 1.25) * 0.5) < 0.05, `full pivot turned ${l.turned.toFixed(3)} rad in 0.5 s`);
+  // pivot rate = 3.4 × 0.5 / (1 + 0.005 × weight): 1.70 rad/s empty, 1.51 rad/s at weight 25.
+  assert(Math.abs(e.turned - 1.7 * 0.5) < 0.05, `empty pivot turned ${e.turned.toFixed(3)} rad in 0.5 s`);
+  assert(Math.abs(l.turned - (1.7 / 1.125) * 0.5) < 0.05, `full pivot turned ${l.turned.toFixed(3)} rad in 0.5 s`);
+  // A pinned, loaded trailer must never pivot faster than the same load turns while driving (3.4 / (1 + 0.05 × 25)).
+  assert(l.turned / 0.5 <= 3.4 / 2.25 + 0.05, `full-load pivot (${(l.turned / 0.5).toFixed(2)} rad/s) outpaces driving turns`);
 });
 
 check('沒頂牆時靜止不會原地轉向', () => {
